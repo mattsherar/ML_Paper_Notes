@@ -48,7 +48,7 @@ ___
 Architecture: 
 ![alt text][ES_RNN]
 
-[ES_RNN]: es_rnn_arch.png "ES_RNN"
+[ES_RNN]: images/es_rnn_arch.png "ES_RNN"
 
 ## DeepGLO (Think Globally, Act Locally)
 ___
@@ -78,14 +78,14 @@ ___
 Overview: 
 ![alt text][tft_overview]
 
-[tft_overview]: tft_overview.png "TFT"
+[tft_overview]: images/tft_overview.png "TFT"
 - known inputs include things like day of week or if a promotion will be on
 - observed could be other time varying covraiates 
 
 Architecture: 
 ![alt text][tft_arch]
 
-[tft_arch]: tft_arch.png "TFT_arch"
+[tft_arch]: images/tft_arch.png "TFT_arch"
 
 ## Detecting and quantifying causal associations in large nonlinear time series datasets
 ___
@@ -188,8 +188,8 @@ Summary:
 Architecture: 
 ![alt text][earth_cause]
 
-[earth_cause]: earth_causation_challanges.png "Challanges"
-[ci_methods]: CI_methods.png "methods"
+[earth_cause]: images/earth_causation_challanges.png "Challanges"
+[ci_methods]: images/CI_methods.png "methods"
 
 ## Can we learn individual-level treatment policies from clinical data?
 ___ 
@@ -204,6 +204,87 @@ ___
 - New methods for jointly analyzing experimental and observational data
 - new designs of trials also will be beneficial
 
+## Recurrent NN for Multivariate Time Series with Missing Values
+___
+
+- missing values and their missing patterns are often correlated with target labels
+    + called 'informative missingness'
+- paper states there have not been RNN structures incorporating the patterns of missingness for time series classifcation problems 
+- develop RNN called GRU-D to exploit two representations of informative missingness patterns
+    + masking - informs the model which inputs are missing
+    + time-interval - encapsulates the input observation patterns
+- show that their model outperforms GRU baselines that use imputation
+- GRU-D -> the D stands for decay, as a temporal variable is usually only useful (in medical contexts) for a certain time period after its observation
+    + Decay mechanism is used for input variables and hidden states
+- PhysioNet Challange 2012 dataset
+    + 8000 ICU visits each with 33 variables
+- MIMC-III 
+    + 58,000 hospital admission records 
+    + 99 time series from 19,714 visits 
+
+
+## RETAIN - An interpretable Predictive Model for Healthcare using Reverse Time Attention Mechanism
+___
+
+- Accurate and interpretable model for EHR data
+- attends to EHR data in reverse time order
+- applied on dataset with 14M visits completed by 263K patients
+- data is comprised of sequences of patient visits
+    + each visit is comprised of a varying number of medical codes
+    + in disease progression modelling the goal is to predict the codes occuring at the next visit 
+- uses two sets of weights, one for visit level attention, and one for variable level attention
+    + alphas for visit level, betas for variable level
+    + use two RNNs to generate alphas and betas seperatly
+
+![alt_text][retain_arch]
+[retain_arch]: images/retain_arch.png "retain"
+
+- Overall, the RETAIN attention mechanism can be viewed as the inverted architecture of the standard attention mechanism for NLP
+    + MLP to embed visit information and use RNN to generate attention weights
+- Finding the visits that contribute the most to prediction are derived by finding the largest alpha
+    - finding influential variables more complicated
+    - propose a method that assumes the x_{i,j} that yeilds the biggest change in y will be the input variable with highest contribution
+- apply to predicting heart failure 
+
+## Attentive State-Space Modeling of Disease Progression
+___
+
+- Models of disease progression (DPM) are key for two main reasons
+    + Predicting patient outcomes
+    + understanding disease dynamics
+- present a probabalistic model that learns an accurate and interpretable structured representation for disease trajectories
+- unlikey markovian models - this one uses attention to creat memoryful dynamics
+- use data from UK cystic fibrosis registry
+- model uses a state-space representation to segement a disease into stages of progression
+- learns disease states in unsupervised fashion
+- implement dynamic attention mechanism with seq to seq RNN
+- since model is non-markovian, inference of posterior disease states is intractable and cannot be conducted using standard forward-backward routines
+    + use a structured inference network trained to predict posterior state distributions by mimicking the attentive structure of the model
+- the model applies attetnio to the latent state-space
+    + in RETAIN it is applied to the sample space
+    + in this model attention interprets disease dynamics
+- HMM are traditionally used for DPM problems
+- attention weights in the model determine the influence of past state realizations on future state transitions via linear dynamics
+
+-architecture:
+
+![a_ss_arch] [a_ss_arch]
+[a_ss_arch]: images/a_ss_arch.png "a_ss_arch"
+
+- use a variational learning algorithm that jointly learns model parameters and a structured inference network that approximates the posterior p(z|x)
+
+-the inference network is below:
+
+![a_ss_inference_network] [a_ss_inference_network]
+[a_ss_inference_network]: images/a_ss_inference_network.png "a_ss_inference_network"
+
+- training algorithm:
+    + Sample (z_1, ..., z_t) ~ q(z_T, x_T) for i = 1,..., N
+    + estimate ELBO L(x_T, z_1, ..., z_t)
+    + gradients theta and phi
+    + update two model parameters
+- model effectively models disease state transitions
+- also effectively models 1-year risk of comordbitities more accurately than retain and other baselines
 
 
 ### List of papers read:
