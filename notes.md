@@ -4,6 +4,55 @@ subtitle: >
   Notes on specific ML Papers
 ---
 
+## Estimating Individual Treatment Effects: Generalized bounds and algorithms
+___
+
+- new theoretical analysis on predicting ITE with observational data
+- propose new algorithms that acheive SOTA on real and synthetic datasets
+- main contribution is to give the first generalization error bound for estimating ITE 
+ - from the bounds they derive, they build models that learn outcome functions (m_0, m_1) under a constraint that encourages better generalization across the treated and control populations
+ - Builds on pervious paper with balancing neural networks
+     + they previously proposed learning a representation then peforming ridge regression on the representation
+     + new method overcomes the limitations:
+         * linear hypothesis of the representation
+         * treatment indicator might get lost if the learned representation is high dimensional
+- call the general framework they propose 'counterfactual regression'
+
+![alt text][ite_bounds]
+
+[ite_bounds]: images/ite_bounds.png "ITE"
+
+- TARnet is CFR without weighting their IPM penalty
+
+![alt text][ite_results]
+
+[ite_results]: images/ite_results.png "ITE_res"
+
+
+## Adapting Neural Networks for the Estimation of Treatment Effects
+___
+
+- estimation of treatment effects from observational data usually done in two steps:
+    + fit models for expected outcome and treatment propenstiy
+    + plug these fitted models into some downstream estimator
+- NN's are a good choice for the first step
+    + question is, how do we adapt them to improve the quality of the final estimate
+- propose new architecture they call dragonnet exploits sufficency of propensity score for estimation adjustment
+- use targeted regularization, induces a bias towards models that have asymptotic properties 'out of the box'
+- Sufficiency of propensity scores implies that only the information in X that is relevant for estimating the propensity score is necassary for the estimation of the causal effect
+- using this, if we build a NN to predict treatment, then remove the last layer, we should be left with represenation that is most relevant for predicting the treatment
+- Dragonnet uses this idea in creating a three-headed NN
+- they find empircal evidence that the dargonnet trades off prediction quality for a good representation for propensity score
+
+![alt text][dragonnet]
+
+[dragonnet]: images/dragonnet.png "dragonnet"
+
+- Test on ACIC 2018 data and IHDP data
+![alt text][dragonnet_results]
+
+[dragonnet_results]: images/dragonnet_results.png "dragonnet_results"
+
 ## The M4 Competition: Results, findings, conclusion and way forward 
 ___
 - Three goals of M4 Competition
