@@ -4,6 +4,54 @@ subtitle: >
   Notes on specific ML Papers
 ---
 
+## Representation Learning with Contrastive Predictive Coding
+___
+
+- Key insight of the proposed model is that it learns representations by predicting the future latent space with autoregressive methods
+- the model is able to learn useful representations in four distinct domains:
+    + speech
+    + images
+    + text 
+    + RL in 3D envs
+- common strategies for representation learning have been predicting future, missing or contextual information
+- in neuroscience, predictive coding theory suggests that the brain predicts observations at various levels of abstraction
+- the paper proposes the following:
+    + compress high-D data into compact latent embedding
+    + use powerful autoregressive models in this latent space
+    + rely on Noise Contrastive Estimation for th loss function
+
+![alt text][CPC_Model_1]
+
+[CPC_Model_1]: images/CPC_Model_1.png "CPC"
+
+
+- use infoNCE loss
+    + based on one positive sample and N negative samples
+    + categorical cross entropy loss of classifying the positive sample correctly
+- Experiments
+    + Audio - use a 100 hour LibriSpeech dataset 
+        * Used strided convolution network that runs on 16KHz waveform
+        * 256 hidden unit GRU
+        * use the hidden state of the GRU at each timestep to predict 12 timesteps into the future
+        * train on audio samples length 20480 (slightly longer than a second)
+
+
+
+## Shape and Time Distortion Loss for Training Deep Time Series Forecasting Models
+
+___
+
+- Paper claims to address the problem of forecasting non-stationary time series for multiple prediction steps
+- Distortion Loss including Shape and Time
+- Majority of methods use MSE, but has shortcomings
+- derive a differentialable loss function for both shape and temporal terms as well as an efficent custom backprop implementation for speeding up optimization
+- Training DNN's with Dynamic Time Warping enables focus on the shape error between two signals
+- DTW ignores elastic distortions
+- Use soft-dtw for the shape term
+- Temporal loss is derived from the DTW matrix and computing the Time Distortion Index
+    + basically consists in computing the deviation between the optimal DTW path A* and the first diagonal
+
+
 ## Estimating Individual Treatment Effects: Generalized bounds and algorithms
 ___
 
