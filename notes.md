@@ -4,6 +4,71 @@ subtitle: >
   Notes on specific ML Papers
 ---
 
+## Time Series Data Augmentation for Deep Learning: A Survey
+___
+
+- systematically review different data augmentation methods for time series
+- emperically compare different methods on various tasks such as anomaly detection, classification and forecasting
+- basic idea of augmentation is to generate synthetic datasets conering unexplored input space while maintaining correct labels
+- challanges include temporal dependancy and multivariate structure of timeseries
+- decomposition methods: 
+    + time series decomposed into trend, seasonality and irregular components
+    + different transofmations applied to the individual components
+- model based methods:
+    + statistical model learned from the data and then pertubation performed on the parameter space
+    + GAN's 
+- Time domain:
+    + most straightforward method
+    + manipulate the original time series directly
+    + inject guassian noise or more complicated noise patterns
+- window warping:
+    + similar to DTW, select a window then compress (downsample) or extend (upsample) then crop
+- frequency domain:
+    + perturbations in both amplitutde spectrum and phase spectrum
+- on various forecasting tasks using deep models (DeepAR, MQRNN and Transformer) (tasks: electricty, traffic, M4) data augmentation provided significant average improvement in Mean absolute scaled error but did significantly worsen performance for specific model-data combos
+
+
+## Deep learning of dynamical attractors from time series measurements 
+___
+
+- the goal is to develop a general purpose method for reconstructing the d-dimensional attractor of an unknown dynamical system given only a univariate measurement time series
+- introduce a custom loss function and regularizer for autoencoders (false nearest neighbour loss)
+- discover underlying attractors in datasets from climate science, neuroscience and electrophysiology
+- 
+
+## Unsupervised Scalable Representation Learning for Multivariate Time Series
+___
+
+- their method can handle varying and long-length multivariate time series
+- They use exponentially dilated convolutions in their encoders
+- Triplet loss employing time-based negative sampling
+- test how representations can be used for classification tasks
+- triplet loss works as follows:
+    + select a segment x_ref of a given time series
+    + select a segment x_pos that is contained within x_ref
+    + choose another segment x_neg at random from a different series (or the same one if it is long enough)
+    + the loss pushes the computed representations to distinguish between x_ref and x_neg and assimilate x_ref and x_pos
+- 
+- 
+
+
+## Unsupervised Feature Extraction by Time Contastive Learning and Nonlinear ICA
+___
+
+- propose a new principal for unsupervised deep learning from time series which uses the non-stationarity structure of the data
+- representation allows for optimal discrimination of the time segments
+- they show that their method (TCL) can be related to a non-linear ICA model, when ICA includes temporal non-stationarities
+- temporal coherence or slow feature analysis try to find features which change as slowly as possible, originally proposed for learning invariant features
+- learned features should enable discrimination between different time windows
+- formulate a generative model in which independant components have different distributions in different time windows
+- Basic Algo:
+    + divide multivariate time series into segment windows
+    + associate each data point with the corresponding segment window in which it is contained
+    + learn a feature extractor h() together with linear regression to classify all data points with the corresponding segment labels
+
+- method is applied to MEG (brain) data
+    + used segments of 12.5 seconds or 625 data points
+
 ## Representation Learning with Contrastive Predictive Coding
 ___
 
